@@ -11,6 +11,7 @@ import java.io.IOException;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(SreenWatcher.class)
+@ExtendWith(AllureWatcher.class)
 public class BaseTest {
     protected static WebDriver driver;
 
