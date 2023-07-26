@@ -5,6 +5,8 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.Select;
 
+import java.util.List;
+
 public class AddressBookPage extends BasePage {
     @FindBy(css = "#telephone")
     private WebElement fieldPhone;
@@ -53,7 +55,7 @@ public class AddressBookPage extends BasePage {
         Select dropdownStateSelect = new Select(dropdownState);
         dropdownStateSelect.selectByValue(option);
 
-        var selectedOptions = dropdownStateSelect.getAllSelectedOptions();
+        List<WebElement> selectedOptions = dropdownStateSelect.getAllSelectedOptions();
         assertEquals (1, selectedOptions.size());
         assertEquals (option, selectedOptions.get(0).getAttribute("value"));
 
@@ -64,7 +66,7 @@ public class AddressBookPage extends BasePage {
         Select dropdownCountrySelect = new Select(dropdownCountry);
         dropdownCountrySelect.selectByValue(option);
 
-        var selectedOptions = dropdownCountrySelect.getAllSelectedOptions();
+        List<WebElement> selectedOptions = dropdownCountrySelect.getAllSelectedOptions();
         assertEquals(1, selectedOptions.size());
         assertEquals(option, selectedOptions.get(0).getAttribute("value"));
 
