@@ -6,6 +6,8 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
 import util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -14,28 +16,22 @@ import java.io.IOException;
 @ExtendWith(AllureWatcher.class)
 public class BaseTest {
     protected static WebDriver driver;
-
-    private String browserName;
-    protected String executionMode;
+    private static final Logger logger = LoggerFactory.getLogger(BaseTest.class);
 
     @BeforeEach
     public void launchBrowser() throws IOException {
 
-        executionMode = PropertiesFileReader.getProperty(PropertyKey.EXECUTIONMODE);
-        browserName = PropertiesFileReader.getProperty(PropertyKey.BROWSERNAME);
+        String executionMode = PropertiesFileReader.getProperty(PropertyKey.EXECUTIONMODE);
+        String browserName = PropertiesFileReader.getProperty(PropertyKey.BROWSERNAME);
 
         if (executionMode.equals("local")) {
             driver = WebDriverSingletonLocal.getDriver(browserName);
         } else if (executionMode.equals("remote")) {
             driver = WebDriverSingletonRemote.openDriverInSauceLabs(browserName);
             WebDriverSingletonRemote.setDriver(driver);
-            System.out.println(WebDriverSingletonRemote.getDriver().toString());
-        } else if (executionMode.equals("grid")) {
-            // Use WebDriverSingletonGrid or any other implementation for grid execution
-            // driver = WebDriverSingletonGrid.getDriver(browserName);
-            System.out.println("GRID!!!");
+            logger.info("Remote driver opened: {}", WebDriverSingletonRemote.getDriver().toString());
         }
-        System.out.println(driver);
+        logger.info("Driver initialized: {}", driver);
 
     }
 
@@ -44,6 +40,7 @@ public class BaseTest {
         if (driver != null) {
             driver.quit();
             driver = null;
+            logger.info("Driver closed");
         }
     }
 }

@@ -19,19 +19,6 @@ import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AddAdressTest extends BaseTest {
-    private MainPage loginPage;
-    private AddressBookPage adressBookPage;
-
-    private String emailExist;
-    private String password;
-
-    private String phone;
-    private String street;
-    private String city;
-
-    private String state;
-    private String zip;
-    private String country;
 
     @Test
     public void testAddAddress () throws IOException, InterruptedException {
@@ -42,10 +29,10 @@ public class AddAdressTest extends BaseTest {
         String url = PropertiesFileReader.getProperty(PropertyKey.URLADRBOOK);
         driver.get(url);
 
-        loginPage = new MainPage(driver);
+        MainPage loginPage = new MainPage(driver);
 
-        emailExist = PropertiesFileReader.getProperty(PropertyKey.EMAILEXIST);
-        password = PropertiesFileReader.getProperty(PropertyKey.PASSWORD);
+        String emailExist = PropertiesFileReader.getProperty(PropertyKey.EMAILEXIST);
+        String password = PropertiesFileReader.getProperty(PropertyKey.PASSWORD);
 
         loginPage.enterEmail(emailExist);
         loginPage.enterPassword(password);
@@ -56,19 +43,19 @@ public class AddAdressTest extends BaseTest {
         wait.until(ExpectedConditions.titleContains(TestDataConstants.INFO_AFTER_LOGIN_ADDRESSBOOK));
 
         String actualTitle = driver.getTitle();
-        assertEquals (actualTitle.contains(TestDataConstants.INFO_AFTER_LOGIN_ADDRESSBOOK), true);
+        assertEquals (actualTitle.contains(TestDataConstants.INFO_AFTER_LOGIN_ADDRESSBOOK), true, "Title does not contain the expected information after login.");
 
-        adressBookPage = new AddressBookPage(driver);
+        AddressBookPage adressBookPage = new AddressBookPage(driver);
 
       //  adressBookPage.clickAddAddress();
         Thread.sleep(5000);
 
-        phone = PropertiesFileReader.getProperty(PropertyKey.PHONE);
-        street= PropertiesFileReader.getProperty(PropertyKey.STREET);
-        city= PropertiesFileReader.getProperty(PropertyKey.CITY);
-        state= PropertiesFileReader.getProperty(PropertyKey.STATE);
-        zip= PropertiesFileReader.getProperty(PropertyKey.ZIP);
-        country= PropertiesFileReader.getProperty(PropertyKey.COUNTRY);
+        String phone = PropertiesFileReader.getProperty(PropertyKey.PHONE);
+        String street= PropertiesFileReader.getProperty(PropertyKey.STREET);
+        String city= PropertiesFileReader.getProperty(PropertyKey.CITY);
+        String state= PropertiesFileReader.getProperty(PropertyKey.STATE);
+        String zip= PropertiesFileReader.getProperty(PropertyKey.ZIP);
+        String country= PropertiesFileReader.getProperty(PropertyKey.COUNTRY);
 
         adressBookPage.enterPhone(phone) ;
         adressBookPage.enterCity(city);
@@ -81,6 +68,6 @@ public class AddAdressTest extends BaseTest {
 
         WebElement element = driver.findElement(By.cssSelector(".message-success"));
         String actualText = element.getText();
-        assertEquals("You saved the address.", actualText);
+        assertEquals("You saved the address.", actualText, "The success message after saving the address is not as expected.");
     }
 }

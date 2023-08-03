@@ -18,16 +18,18 @@ public class ProductsPage extends BasePage {
     @FindBy(css = ".towishlist")
     private WebElement linkAddToWishList;
 
-    @FindBy(css = "ol li:nth-child(3) .product-item-info")
-    private WebElement linkToParticularItem2;
-    @FindBy(css = "ol li:nth-child(5) .product-item-info")
-    private WebElement linkToParticularItem3;
     @FindBy(css = ".tocart")
     private WebElement linkAddToCart;
     @FindBy(css = ".showcart")
     private WebElement linkGoToCart;
     @FindBy(css = ".counter-label")
     private WebElement linkToCartNumberVisible;
+
+    @FindBy(css = "#search.input-text")
+    private WebElement fieldSearch;
+
+    @FindBy(css = ".products ol li:nth-child(1) .product-item-info")
+    private WebElement linkToParticularItemFromSearch;
 
     public ProductsPage(WebDriver driver) {
 
@@ -49,16 +51,6 @@ public class ProductsPage extends BasePage {
         return new WishListPage(driver);
     }
 
-    public ProductsPage goToParticularItem2() {
-        linkToParticularItem2.click();
-        return this;
-    }
-
-    public ProductsPage goToParticularItem3() {
-        linkToParticularItem3.click();
-        return this;
-    }
-
     public ProductsPage addToCart() {
         linkAddToCart.click();
         return this;
@@ -72,6 +64,20 @@ public class ProductsPage extends BasePage {
         linkGoToCart.click();
 
         return new CartPage(driver);
+    }
+
+    public ProductsPage enterSearchText(String searchText) {
+        fieldSearch.sendKeys(searchText);
+        return this;
+    }
+
+    public WebElement getFieldSearch() {
+        return fieldSearch;
+    }
+
+    public ProductsPage goToParticularItemFromSearch() {
+        linkToParticularItemFromSearch.click();
+        return this;
     }
 }
 

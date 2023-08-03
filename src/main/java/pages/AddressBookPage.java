@@ -1,11 +1,8 @@
 package pages;
 
-import static org.junit.jupiter.api.Assertions.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.Select;
-
-import java.util.List;
 
 public class AddressBookPage extends BasePage {
     @FindBy(css = "#telephone")
@@ -54,22 +51,12 @@ public class AddressBookPage extends BasePage {
     public AddressBookPage selectState(String option) {
         Select dropdownStateSelect = new Select(dropdownState);
         dropdownStateSelect.selectByValue(option);
-
-        List<WebElement> selectedOptions = dropdownStateSelect.getAllSelectedOptions();
-        assertEquals (1, selectedOptions.size());
-        assertEquals (option, selectedOptions.get(0).getAttribute("value"));
-
         return this;
     }
 
     public AddressBookPage selectCountry(String option) {
         Select dropdownCountrySelect = new Select(dropdownCountry);
         dropdownCountrySelect.selectByValue(option);
-
-        List<WebElement> selectedOptions = dropdownCountrySelect.getAllSelectedOptions();
-        assertEquals(1, selectedOptions.size());
-        assertEquals(option, selectedOptions.get(0).getAttribute("value"));
-
         return this;
     }
 

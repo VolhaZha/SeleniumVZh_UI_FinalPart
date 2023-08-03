@@ -22,7 +22,13 @@ public class AllureWatcher implements TestWatcher {
     public static String saveTimestampLog() {
         Date d = new Date();
         String[] dateTokens = d.toString().split(" ");
-        return dateTokens[1] + " " + dateTokens[2] + ", " + dateTokens[5] + " " + dateTokens[3];
+
+        String month = dateTokens[1];
+        String day = dateTokens[2];
+        String year = dateTokens[5];
+        String time = dateTokens[3];
+
+        return month + " " + day + ", " + year + " " + time;
     }
 
     @Override

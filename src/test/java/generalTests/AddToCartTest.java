@@ -5,6 +5,7 @@ import constants.TestDataConstants;
 import constants.TimeConstants;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.CartPage;
@@ -16,19 +17,9 @@ import util.PropertyKey;
 import java.io.IOException;
 import java.time.Duration;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AddToCartTest extends BaseTest {
-    private MainPage mainPage;
-    private ProductsPage productsPage;
-    private CartPage cartPage;
-    private String emailExist;
-    private String password;
-
-    private String executionMode;
-
 
     @Test
     public void testAddToCartList () throws IOException, InterruptedException {
@@ -39,12 +30,12 @@ public class AddToCartTest extends BaseTest {
         String url = PropertiesFileReader.getProperty(PropertyKey.URLMAIN);
         driver.get(url);
 
-        mainPage = new MainPage(driver);
+        MainPage mainPage = new MainPage(driver);
 
         mainPage.goToSignIn();
 
-        emailExist = PropertiesFileReader.getProperty(PropertyKey.EMAILEXIST);
-        password = PropertiesFileReader.getProperty(PropertyKey.PASSWORD);
+        String emailExist = PropertiesFileReader.getProperty(PropertyKey.EMAILEXIST);
+        String password = PropertiesFileReader.getProperty(PropertyKey.PASSWORD);
 
         mainPage.enterEmail(emailExist);
         mainPage.enterPassword(password);
@@ -55,33 +46,47 @@ public class AddToCartTest extends BaseTest {
         wait.until(ExpectedConditions.titleContains(TestDataConstants.INFO_AFTER_LOGIN));
 
         String actualTitle = driver.getTitle();
-        assertEquals (actualTitle.contains(TestDataConstants.INFO_AFTER_LOGIN), true);
+        assertEquals (actualTitle.contains(TestDataConstants.INFO_AFTER_LOGIN), true, "Title does not contain the expected information after login.");
 
         mainPage.clickSale();
 
-        productsPage = new ProductsPage(driver);
+        ProductsPage productsPage = new ProductsPage(driver);
+
+        String product1 = PropertiesFileReader.getProperty(PropertyKey.PRODUCT1);
+        String product2 = PropertiesFileReader.getProperty(PropertyKey.PRODUCT2);
+        String product3 = PropertiesFileReader.getProperty(PropertyKey.PRODUCT3);
 
         productsPage.goToClothesTypeSection();
-        productsPage.goToParticularItem();
+        productsPage.enterSearchText(product1).getFieldSearch().sendKeys(Keys.ENTER);
+        productsPage.goToParticularItemFromSearch();
         productsPage.addToCart();
-        driver.navigate().back();
 
-        productsPage.goToParticularItem2();
+        productsPage.enterSearchText(product2).getFieldSearch().sendKeys(Keys.ENTER);
+        productsPage.goToParticularItemFromSearch();
         productsPage.addToCart();
-        driver.navigate().back();
 
-        productsPage.goToParticularItem3();
+        productsPage.enterSearchText(product3).getFieldSearch().sendKeys(Keys.ENTER);
+        productsPage.goToParticularItemFromSearch();
         productsPage.addToCart();
 
         Thread.sleep(5000);
 
         productsPage.goToCart();
 
-        cartPage = new CartPage(driver);
+        CartPage cartPage = new CartPage(driver);
         cartPage.countings();
 
+        String actualNumberInCart = driver.findElement(By.cssSelector(".counter-label")).getText();
+        assertEquals (true, actualNumberInCart.contains ("3"), "Actual number in cart is not as expected.");
+        System.out.println("NumberOfProducts Actual: "+actualNumberInCart);
+
+        String actualSumInCart = driver.findElement(By.cssSelector(".subtotal .price-wrapper")).getText();
+        assertEquals (true, actualSumInCart.contains("93"), "Actual sum in cart is not as expected.");
+
         cartPage.clearUpCart();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".subtitle.empty")));
         String emptyCart = driver.findElement(By.cssSelector(".subtitle.empty")).getText();
-        assertThat (emptyCart,containsString("You have no items in your shopping cart."));
+        assertEquals (true, emptyCart.contains("You have no items in your shopping cart."), "Cart is not empty after clearing it.");
+
     }
 }

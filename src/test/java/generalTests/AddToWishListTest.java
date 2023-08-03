@@ -16,18 +16,9 @@ import util.PropertyKey;
 import java.io.IOException;
 import java.time.Duration;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AddToWishListTest extends BaseTest {
-    private MainPage mainPage;
-    private ProductsPage salePage;
-    private String emailExist;
-    private String password;
-
-    private String executionMode;
-
 
     @Test
     public void testAddToWishList () throws IOException, InterruptedException {
@@ -38,12 +29,12 @@ public class AddToWishListTest extends BaseTest {
         String url = PropertiesFileReader.getProperty(PropertyKey.URLMAIN);
         driver.get(url);
 
-        mainPage = new MainPage(driver);
+        MainPage mainPage = new MainPage(driver);
 
         mainPage.goToSignIn();
 
-        emailExist = PropertiesFileReader.getProperty(PropertyKey.EMAILEXIST);
-        password = PropertiesFileReader.getProperty(PropertyKey.PASSWORD);
+        String emailExist = PropertiesFileReader.getProperty(PropertyKey.EMAILEXIST);
+        String password = PropertiesFileReader.getProperty(PropertyKey.PASSWORD);
 
         mainPage.enterEmail(emailExist);
         mainPage.enterPassword(password);
@@ -54,21 +45,21 @@ public class AddToWishListTest extends BaseTest {
         wait.until(ExpectedConditions.titleContains(TestDataConstants.INFO_AFTER_LOGIN));
 
         String actualTitle = driver.getTitle();
-        assertEquals (actualTitle.contains(TestDataConstants.INFO_AFTER_LOGIN), true);
+        assertEquals (actualTitle.contains(TestDataConstants.INFO_AFTER_LOGIN), true, "Title does not contain the expected information after login.");
 
         mainPage.clickSale();
 
-        salePage = new ProductsPage(driver);
+        ProductsPage salePage = new ProductsPage(driver);
 
         salePage.goToClothesTypeSection();
         salePage.goToParticularItem();
         salePage.addToWishList();
 
         String actualTitleWishlist = driver.getTitle();
-        assertEquals (actualTitleWishlist.contains(TestDataConstants.TITLE_AFTER_WISHLIST_ADDING), true);
+        assertEquals (actualTitleWishlist.contains(TestDataConstants.TITLE_AFTER_WISHLIST_ADDING), true, "Title does not contain the expected information after login.");
 
         WebElement element = driver.findElement(By.cssSelector(".message-success"));
         String actualText = element.getText();
-        assertThat(actualText, containsString("has been added to your Wish List"));
+        assertEquals(true, actualText.contains("has been added to your Wish List"), "Item has not been successfully added to Wish List.");
     }
 }

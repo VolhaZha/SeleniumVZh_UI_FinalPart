@@ -23,8 +23,10 @@ public enum PropertyKey {
     ACCESSKEYSL("accessKeySL"),
     URLSL("urlSL"),
     EXECUTIONMODE ("executionMode"),
-    BROWSERNAME ("browserName");
-
+    BROWSERNAME ("browserName"),
+    PRODUCT1 ("product1"),
+    PRODUCT2 ("product2"),
+    PRODUCT3 ("product3");
     private final String key;
 
     PropertyKey (String key) {
